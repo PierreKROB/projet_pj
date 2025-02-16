@@ -6,7 +6,7 @@ use App\Controllers\PageController;
 $authController = new AuthController();
 $pageController = new PageController();
 
-// Routes Authentification
+
 if ($_SERVER['REQUEST_URI'] === '/auth/login' && $_SERVER['REQUEST_METHOD'] === 'GET') {
     $authController->showLoginForm();
 } elseif ($_SERVER['REQUEST_URI'] === '/auth/register' && $_SERVER['REQUEST_METHOD'] === 'GET') {

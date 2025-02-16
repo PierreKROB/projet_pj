@@ -15,23 +15,60 @@ class AuthController
 
     public function register($username, $password)
     {
-        return $this->userModel->register($username, $password);
+        session_start();
+
+        if (!isset($_POST['username']) || !isset($_POST['password'])) {
+            $_SESSION['message'] = "Veuillez remplir tous les champs.";
+            header("Location: /auth/register");
+            exit;
+        }
+
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        $result = $this->userModel->register($username, $password);
+
+        if ($result['success']) {
+            $_SESSION['message'] = "Inscription réussie. Vous pouvez maintenant vous connecter.";
+            header("Location: /auth/login");
+            exit;
+        } else {
+            $_SESSION['message'] = $result['message'];
+            header("Location: /auth/register");
+            exit;
+        };
     }
 
-    public function login($username, $password)
+    public function login()
     {
+        session_start();
+
+        if (!isset($_POST['username']) || !isset($_POST['password'])) {
+            $_SESSION['message'] = "Veuillez remplir tous les champs.";
+            header("Location: /auth/login");
+            exit;
+        }
+
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
         $result = $this->userModel->login($username, $password);
 
         if ($result['success']) {
-            session_start();
             $_SESSION['user'] = [
                 'id' => (string) $result['user']['_id'],
                 'username' => $result['user']['username'],
             ];
+            header("Location: /");
+            exit;
+        } else {
+            $_SESSION['message'] = $result['message'];
+            header("Location: /auth/login");
+            exit;
         }
-
-        return $result;
     }
+
+
 
     public function logout()
     {
@@ -45,7 +82,7 @@ class AuthController
         extract($data);
         require dirname(__DIR__, 2) . "/app/views/$view.php";
     }
-    
+
 
 
     public function showRegisterForm()

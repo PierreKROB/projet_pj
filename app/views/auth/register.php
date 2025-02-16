@@ -7,9 +7,14 @@
 </head>
 <body>
     <h1>Inscription</h1>
-    <?php if (!empty($message)) : ?>
-        <p><?= htmlspecialchars($message) ?></p>
+
+    <?php
+    session_start();
+    if (!empty($_SESSION['message'])) : ?>
+        <p style="color: red;"><?= htmlspecialchars($_SESSION['message']) ?></p>
+        <?php unset($_SESSION['message']); // Supprimer le message après affichage ?>
     <?php endif; ?>
+
     <form action="/auth/register" method="POST">
         <label for="username">Nom d'utilisateur :</label>
         <input type="text" id="username" name="username" required>
@@ -19,5 +24,8 @@
         <br>
         <button type="submit">S'inscrire</button>
     </form>
+
+    <p>Déjà inscrit ? <a href="/auth/login">Connecte-toi ici</a></p>
+
 </body>
 </html>

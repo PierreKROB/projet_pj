@@ -12,6 +12,7 @@ class ParticipationModel extends BaseModel
     public function __construct()
     {
         parent::__construct();
+        
         $this->collection = $this->getCollection('participations');
     }
 

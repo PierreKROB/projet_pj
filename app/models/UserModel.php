@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use MongoDB\BSON\UTCDateTime;
 
 class UserModel extends BaseModel
 {

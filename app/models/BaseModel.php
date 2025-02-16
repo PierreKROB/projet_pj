@@ -1,8 +1,10 @@
 <?php
-
 namespace App\Models;
+
 require_once __DIR__ . '/../../vendor/autoload.php';
+
 use MongoDB\Client;
+use Dotenv\Dotenv;
 
 class BaseModel
 {
@@ -11,8 +13,13 @@ class BaseModel
     public function __construct()
     {
         if (!self::$db) {
-            $client = new Client("mongodb://localhost:27017");
-            self::$db = $client->selectDatabase('quiz_battle');
+            $dotenv = Dotenv::createImmutable(dirname(__DIR__, 2));
+            $dotenv->load();
+
+            $mongoUri = $_ENV['MONGO_URI'] ?? 'mongodb://localhost:27017';
+
+            $client = new Client($mongoUri);
+            self::$db = $client->selectDatabase('Cluster0');
         }
     }
 
