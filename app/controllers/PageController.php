@@ -18,10 +18,9 @@ class PageController
         $this->render('pages/home');
     }
 
-
-    private function render($view, $data = [])
+    public function render($view, $data = [])
     {
         extract($data);
-        require __DIR__ . "/../../views/$view.php";
+        require dirname(__DIR__, 2) . "/app/views/$view.php";
     }
 }
