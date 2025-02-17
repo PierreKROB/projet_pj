@@ -2,9 +2,11 @@
 
 use App\Controllers\AuthController;
 use App\Controllers\PageController;
+use App\Controllers\QuizController;
 
 $authController = new AuthController();
 $pageController = new PageController();
+$quizController = new QuizController();
 
 
 if ($_SERVER['REQUEST_URI'] === '/auth/login' && $_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -26,6 +28,14 @@ if ($_SERVER['REQUEST_URI'] === '/auth/login' && $_SERVER['REQUEST_METHOD'] === 
         header('Location: /auth/login');
         exit();
     }
+} elseif ($_SERVER['REQUEST_URI'] === '/quiz/setup' && $_SERVER['REQUEST_METHOD'] === 'GET') {
+    require dirname(__DIR__) . '/app/views/quiz/setup.php';
+} elseif (strpos($_SERVER['REQUEST_URI'], '/quiz/play') === 0 && $_SERVER['REQUEST_METHOD'] === 'GET') {
+    $quizController->startQuiz();
+} elseif ($_SERVER['REQUEST_URI'] === '/quiz/answer' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $quizController->answerQuestion();
+} elseif ($_SERVER['REQUEST_URI'] === '/quiz/result') {
+        require dirname(__DIR__) . '/app/views/quiz/result.php';
 
 } elseif ($_SERVER['REQUEST_URI'] === '/') {
     session_start();
