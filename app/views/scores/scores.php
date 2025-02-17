@@ -1,21 +1,21 @@
-<?php
+<?php include __DIR__ . '/../layouts/header.php';  ?>
 
-include __DIR__ . '/../layouts/header.php'; 
-// app/Views/scores/scores.php
-?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mes Scores</title>
     <style>
-        div{
+        div {
             padding: 10px 20px;
         }
+
         h2 {
             color: #333;
         }
+
         button {
             background-color: #4CAF50;
             color: white;
@@ -32,9 +32,12 @@ include __DIR__ . '/../layouts/header.php';
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Vos Scores de Quiz</h1>
+
+        <h2>Nombre total de quiz joués : <?= $quizzesPlayed ?></h2>
 
         <?php if (count($scores) > 0): ?>
             <table>
@@ -54,8 +57,9 @@ include __DIR__ . '/../layouts/header.php';
         <?php else: ?>
             <p>Aucun score enregistré pour le moment.</p>
         <?php endif; ?>
-        
+
         <p><a href="/">🏠 Retour à l'accueil</a></p>
     </div>
 </body>
+
 </html>

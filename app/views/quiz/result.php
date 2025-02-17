@@ -5,6 +5,8 @@ include __DIR__ . '/../layouts/header.php';
 $score = $_SESSION['score'] ?? 0;
 $totalQuestions = isset($_SESSION['quiz']) ? count($_SESSION['quiz']) : 0;
 
+$quizCopy = $_SESSION['quiz'] ?? [];
+
 unset($_SESSION['quiz']);
 unset($_SESSION['current_question']);
 unset($_SESSION['score']);
@@ -23,6 +25,7 @@ unset($_SESSION['score']);
     <form action="/quiz/save" method="POST">
         <label for="title">Titre du quiz :</label>
         <input type="text" name="title" id="title" required>
+        <input type="hidden" name="quiz_data" value="<?= htmlspecialchars(json_encode($quizCopy)) ?>">
 
         <button type="submit">💾 Enregistrer le quiz</button>
     </form>

@@ -1,30 +1,31 @@
 <?php
-// app/Controllers/ScoresController.php
-
 namespace App\Controllers;
 
 use App\Models\ParticipationModel;
+use App\Models\UserModel;
 
 class ScoresController
 {
-    // Méthode pour afficher les scores de l'utilisateur
     public function showScores($userId)
     {
-        // Créer une instance du modèle ParticipationModel
         $participationModel = new ParticipationModel();
+        $userModel = new UserModel();
 
-        // Récupérer les participations de l'utilisateur
         $scores = $participationModel->getParticipationsByUserId($userId);
+        $user = $userModel->getUserById($userId);
 
-        // Rendre la vue 'scores' en lui passant les scores
-        $this->render('scores/scores', ['scores' => $scores]);
+        // Récupérer le nombre de quiz joués
+        $quizzesPlayed = $user['quizzes_played'] ?? 0;
+
+        $this->render('scores/scores', [
+            'scores' => $scores,
+            'quizzesPlayed' => $quizzesPlayed
+        ]);
     }
 
-    // Fonction render pour charger la vue
     private function render($view, $data = [])
     {
-        extract($data); // Extraire les variables depuis le tableau $data
-        require dirname(__DIR__, 2) . "/app/Views/$view.php"; // Charger la vue
+        extract($data);
+        require dirname(__DIR__, 2) . "/app/Views/$view.php";
     }
 }
-

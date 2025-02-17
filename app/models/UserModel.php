@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+
+use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 class UserModel extends BaseModel
@@ -40,7 +42,7 @@ class UserModel extends BaseModel
         if (!$validation['success']) {
             return $validation;
         }
-        
+
         $user = $this->collection->findOne(['username' => $username]);
         if (!$user) {
             return ['success' => false, 'message' => 'Utilisateur introuvable.'];
@@ -68,5 +70,18 @@ class UserModel extends BaseModel
         }
 
         return ['success' => true];
+    }
+
+    public function incrementQuizzesPlayed($userId)
+    {
+        $this->collection->updateOne(
+            ['_id' => new ObjectId($userId)],
+            ['$inc' => ['quizzes_played' => 1]]
+        );
+    }
+
+    public function getUserById($userId)
+    {
+        return $this->collection->findOne(['_id' => new ObjectId($userId)]);
     }
 }
