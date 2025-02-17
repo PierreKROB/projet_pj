@@ -21,7 +21,6 @@ if ($_SERVER['REQUEST_URI'] === '/auth/login' && $_SERVER['REQUEST_METHOD'] === 
     $authController->logout();
     header('Location: /auth/login');
     exit();
-
 } elseif ($_SERVER['REQUEST_URI'] === '/scores') {
     session_start();
     if (!isset($_SESSION['user'])) {
@@ -33,10 +32,11 @@ if ($_SERVER['REQUEST_URI'] === '/auth/login' && $_SERVER['REQUEST_METHOD'] === 
 } elseif (strpos($_SERVER['REQUEST_URI'], '/quiz/play') === 0 && $_SERVER['REQUEST_METHOD'] === 'GET') {
     $quizController->startQuiz();
 } elseif ($_SERVER['REQUEST_URI'] === '/quiz/answer' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $quizController->answerQuestion();
+    $quizController->answerQuestion();
 } elseif ($_SERVER['REQUEST_URI'] === '/quiz/result') {
-        require dirname(__DIR__) . '/app/views/quiz/result.php';
-
+    require dirname(__DIR__) . '/app/views/quiz/result.php';
+} elseif ($_SERVER['REQUEST_URI'] === '/quiz/save' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $quizController->saveQuiz();
 } elseif ($_SERVER['REQUEST_URI'] === '/') {
     session_start();
     if (!isset($_SESSION['user'])) {
