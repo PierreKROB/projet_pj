@@ -1,5 +1,44 @@
 <?php include __DIR__ . '/../layouts/header.php'; ?>
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play</title>
+    <style>
+        main{
+            padding: 10px 20px;
+        }
+        h2 {
+            color: #333;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 200px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: rgb(62, 142, 65);
+        }
+
+        .score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
 <main>
     <h2>Question <?= isset($index) ? $index + 1 : 1 ?></h2>
 
