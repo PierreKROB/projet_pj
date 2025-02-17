@@ -2,10 +2,12 @@
 
 use App\Controllers\AuthController;
 use App\Controllers\PageController;
+use App\Controllers\ScoresController;
 use App\Controllers\QuizController;
 
 $authController = new AuthController();
 $pageController = new PageController();
+$scoresController = new ScoresController();
 $quizController = new QuizController();
 
 
@@ -28,6 +30,9 @@ if ($_SERVER['REQUEST_URI'] === '/auth/login' && $_SERVER['REQUEST_METHOD'] === 
         header('Location: /auth/login');
         exit();
     }
+    // Appeler le contrôleur pour afficher les scores de l'utilisateur
+    $scoresController->showScores($_SESSION['user']['id']);  // On suppose que l'ID de l'utilisateur est stocké dans la session
+
 } elseif ($_SERVER['REQUEST_URI'] === '/quiz/setup' && $_SERVER['REQUEST_METHOD'] === 'GET') {
     require dirname(__DIR__) . '/app/views/quiz/setup.php';
 } elseif (strpos($_SERVER['REQUEST_URI'], '/quiz/play') === 0 && $_SERVER['REQUEST_METHOD'] === 'GET') {

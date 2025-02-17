@@ -7,9 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battle Quizz</title>
     <style>
+        main{
+            padding: 10px 20px;
+        }
         h2 {
             color: #333;
-            padding: 10px 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 200px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: rgb(62, 142, 65);
         }
     </style>
 </head>
