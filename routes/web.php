@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_URI'] === '/auth/login' && $_SERVER['REQUEST_METHOD'] === 
     require dirname(__DIR__) . '/app/views/quiz/result.php';
 } elseif ($_SERVER['REQUEST_URI'] === '/quiz/save' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $quizController->saveQuiz();
+} elseif ($_SERVER['REQUEST_URI'] === '/quiz/next' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $quizController->nextQuestion();
 } elseif ($_SERVER['REQUEST_URI'] === '/') {
     session_start();
     if (!isset($_SESSION['user'])) {

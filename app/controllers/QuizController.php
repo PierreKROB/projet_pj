@@ -8,7 +8,6 @@ class QuizController
 {
     public function fetchQuiz($amount, $type, $difficulty, $category)
     {
-        // Déterminer le type de question pour l'API
         $typeParam = ($type === "both") ? "" : "&type=" . $type;
         $difficultyParam = "&difficulty=" . $difficulty;
         $categoryParam = ($category !== "any") ? "&category=" . $category : "";
@@ -22,9 +21,8 @@ class QuizController
             die("Erreur lors de la récupération du quiz.");
         }
 
-        return $quizData['results']; // Retourne un tableau des questions
+        return $quizData['results'];
     }
-
 
     public function startQuiz()
     {
@@ -34,7 +32,6 @@ class QuizController
             exit();
         }
 
-        // Initialisation du quiz si ce n'est pas déjà fait
         if (!isset($_SESSION['quiz']) || empty($_SESSION['quiz'])) {
             $amount = $_GET['amount'] ?? 10;
             $type = $_GET['type'] ?? "both";
@@ -50,6 +47,9 @@ class QuizController
         $quiz = $_SESSION['quiz'];
 
         if ($questionIndex >= count($quiz)) {
+            $userModel = new \App\Models\UserModel();
+            $userModel->incrementQuizzesPlayed($_SESSION['user']['id']);
+    
             header("Location: /quiz/result");
             exit();
         }
@@ -85,11 +85,12 @@ class QuizController
             $_SESSION['message'] = "❌ Mauvaise réponse ! La bonne réponse était : <strong>$correctAnswer</strong>";
         }
 
-        $_SESSION['current_question']++;
+        $_SESSION['awaiting_next'] = true;
 
         header("Location: /quiz/play");
         exit();
     }
+
 
     public function saveQuiz()
     {
@@ -99,25 +100,49 @@ class QuizController
             exit();
         }
 
-        if (empty($_POST['title'])) {
-            $_SESSION['message'] = "❌ Veuillez entrer un titre pour enregistrer ce quiz.";
+        if (empty($_POST['title']) || empty($_POST['quiz_data'])) {
+            $_SESSION['message'] = "❌ Veuillez entrer un titre et ne pas quitter la page avant d'enregistrer.";
             header("Location: /quiz/result");
             exit();
         }
 
         $userId = $_SESSION['user']['id'];
         $title = $_POST['title'];
-        $difficulty = $_SESSION['quiz'][0]['difficulty'] ?? 'medium';
-        $category = $_SESSION['quiz'][0]['category'] ?? 'any';
-        $questions = $_SESSION['quiz'];
+        $questions = json_decode($_POST['quiz_data'], true);
 
-        $quizModel = new QuizModel();
+        if (!$questions) {
+            $_SESSION['message'] = "❌ Erreur lors de la récupération des questions.";
+            header("Location: /quiz/result");
+            exit();
+        }
+
+        $difficulty = $questions[0]['difficulty'] ?? 'medium';
+        $category = $questions[0]['category'] ?? 'any';
+
+        $quizModel = new \App\Models\QuizModel();
         $quizModel->createQuiz($userId, $title, $difficulty, $category, $questions);
 
-        $_SESSION['message'] = "✅ Quiz enregistré avec succès !";
+        $_SESSION['message'] = "";
         header("Location: /");
         exit();
     }
+
+    public function nextQuestion()
+{
+    session_start();
+    if (!isset($_SESSION['user']) || !isset($_SESSION['quiz'])) {
+        header('Location: /auth/login');
+        exit();
+    }
+
+    $_SESSION['current_question']++;
+
+    unset($_SESSION['message']);
+
+    header("Location: /quiz/play");
+    exit();
+}
+
 
 
     private function render($view, $data = [])

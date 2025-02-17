@@ -33,7 +33,7 @@
         <h1>Battle Quizz</h1>
         <nav>
             <a href="/">Accueil</a>
-            <a href="/quizz">Jouer un Quizz</a>
+            <a href="/quiz/setup">Jouer un Quizz</a>
             <a href="/scores">Mes Scores</a>
             <a href="/auth/logout">Se déconnecter</a>
         </nav>
