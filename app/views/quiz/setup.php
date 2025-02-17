@@ -20,6 +20,39 @@
 
         <br>
 
+        <!-- Niveau de difficulté -->
+        <label for="difficulty">Difficulté :</label>
+        <select name="difficulty" id="difficulty">
+            <option value="easy">Facile</option>
+            <option value="medium" selected>Moyen</option>
+            <option value="hard">Difficile</option>
+        </select>
+
+        <br>
+
+        <!-- Catégorie -->
+        <label for="category">Catégorie :</label>
+        <select name="category" id="category">
+            <option value="any" selected>Toutes les catégories</option>
+            <option value="9">Culture Générale</option>
+            <option value="10">Divertissement : Livres</option>
+            <option value="11">Divertissement : Films</option>
+            <option value="12">Divertissement : Musique</option>
+            <option value="13">Divertissement : Théâtre</option>
+            <option value="14">Divertissement : Télévision</option>
+            <option value="15">Jeux Vidéo</option>
+            <option value="17">Science & Nature</option>
+            <option value="18">Informatique</option>
+            <option value="19">Mathématiques</option>
+            <option value="21">Sports</option>
+            <option value="23">Histoire</option>
+            <option value="24">Politique</option>
+            <option value="27">Animaux</option>
+            <option value="28">Véhicules</option>
+        </select>
+
+        <br>
+
         <button type="submit">🎮 Lancer le Quiz</button>
     </form>
 

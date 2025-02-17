@@ -15,16 +15,18 @@ class QuizModel extends BaseModel
         $this->collection = $this->getCollection('quizzes');
     }
 
-    public function createQuiz($title, $difficulty, $category, $questions)
-    {
-        return $this->collection->insertOne([
-            'title' => $title,
-            'difficulty' => $difficulty,
-            'category' => $category,
-            'questions' => $questions,
-            'created_at' => new UTCDateTime(),
-        ]);
-    }
+    public function createQuiz($userId, $title, $difficulty, $category, $questions)
+{
+    return $this->collection->insertOne([
+        'user_id' => new ObjectId($userId),
+        'title' => $title,
+        'difficulty' => $difficulty,
+        'category' => $category,
+        'questions' => $questions,
+        'created_at' => new UTCDateTime(),
+    ]);
+}
+
 
     public function findQuizById($id)
     {
