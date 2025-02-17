@@ -1,5 +1,48 @@
 <?php include __DIR__ . '/../layouts/header.php'; ?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup</title>
+    <style>
+        main{
+            padding: 10px 20px;
+        }
+        h2 {
+            color: #333;
+        }
 
+        label {
+            display: block;
+            text-align: left;
+            font-weight: 600;
+            margin: 10px 0 5px;
+        }
+
+        input, select {
+            width: 40%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 200px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: rgb(62, 142, 65);
+        }
+    </style>
 <main>
     <h2>Créer un Quiz</h2>
 
@@ -25,7 +68,7 @@
 
     <br>
 
-    <a href="/">⬅ Retour à l'accueil</a>
+    <a href="/">🏠 Retour à l'accueil</a>
 </main>
 
 </body>
