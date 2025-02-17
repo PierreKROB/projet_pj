@@ -20,6 +20,13 @@ if ($_SERVER['REQUEST_URI'] === '/auth/login' && $_SERVER['REQUEST_METHOD'] === 
     header('Location: /auth/login');
     exit();
 
+} elseif ($_SERVER['REQUEST_URI'] === '/scores') {
+    session_start();
+    if (!isset($_SESSION['user'])) {
+        header('Location: /auth/login');
+        exit();
+    }
+
 } elseif ($_SERVER['REQUEST_URI'] === '/') {
     session_start();
     if (!isset($_SESSION['user'])) {
