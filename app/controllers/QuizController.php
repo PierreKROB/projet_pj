@@ -49,7 +49,7 @@ class QuizController
         if ($questionIndex >= count($quiz)) {
             $userModel = new \App\Models\UserModel();
             $userModel->incrementQuizzesPlayed($_SESSION['user']['id']);
-    
+
             header("Location: /quiz/result");
             exit();
         }
@@ -128,22 +128,104 @@ class QuizController
     }
 
     public function nextQuestion()
-{
-    session_start();
-    if (!isset($_SESSION['user']) || !isset($_SESSION['quiz'])) {
-        header('Location: /auth/login');
+    {
+        session_start();
+        if (!isset($_SESSION['user']) || !isset($_SESSION['quiz'])) {
+            header('Location: /auth/login');
+            exit();
+        }
+
+        $_SESSION['current_question']++;
+
+        unset($_SESSION['message']);
+
+        header("Location: /quiz/play");
         exit();
     }
 
-    $_SESSION['current_question']++;
+    public function startReplay($quizId)
+    {
+        session_start();
+        if (!isset($_SESSION['user'])) {
+            header('Location: /auth/login');
+            exit();
+        }
 
-    unset($_SESSION['message']);
+        if (empty($quizId)) {
+            $_SESSION['message'] = "❌ Erreur : aucun quiz sélectionné.";
+            header("Location: /");
+            exit();
+        }
 
-    header("Location: /quiz/play");
-    exit();
-}
+        $quizModel = new \App\Models\QuizModel();
+        $quiz = $quizModel->findQuizById($quizId);
+
+        if (!$quiz) {
+            $_SESSION['message'] = "❌ Ce quiz n'existe pas ou a été supprimé.";
+            header("Location: /");
+            exit();
+        }
 
 
+        $questions = json_decode(json_encode($quiz['questions']), true);
+
+        $_SESSION['quiz'] = $questions;
+        $_SESSION['current_question'] = 0;
+        $_SESSION['score'] = 0;
+        $_SESSION['replaying_quiz_id'] = (string) $quiz['_id'];
+
+        $this->render('quiz/replay', [
+            'question' => $_SESSION['quiz'][0],
+            'index' => 0
+        ]);
+    }
+
+
+    public function saveReplayScore()
+    {
+        session_start();
+        if (!isset($_SESSION['user']) || !isset($_SESSION['replaying_quiz_id'])) {
+            header('Location: /auth/login');
+            exit();
+        }
+
+        $userId = $_SESSION['user']['id'];
+        $quizId = $_SESSION['replaying_quiz_id'];
+        $score = $_SESSION['score'] ?? 0;
+
+        $participationModel = new \App\Models\ParticipationModel();
+        $participationModel->createParticipation($userId, $quizId, $score);
+
+        unset($_SESSION['quiz']);
+        unset($_SESSION['current_question']);
+        unset($_SESSION['score']);
+        unset($_SESSION['replaying_quiz_id']);
+
+        $_SESSION['message'] = "✅ Score enregistré avec succès !";
+        header("Location: /scores");
+        exit();
+    }
+
+    public function nextReplayQuestion()
+    {
+        session_start();
+        if (!isset($_SESSION['user']) || !isset($_SESSION['quiz'])) {
+            header('Location: /auth/login');
+            exit();
+        }
+
+        $_SESSION['current_question']++;
+
+        if ($_SESSION['current_question'] >= count($_SESSION['quiz'])) {
+            header("Location: /quiz/replay/result");
+            exit();
+        }
+
+        unset($_SESSION['message']);
+
+        header("Location: /quiz/replay/play");
+        exit();
+    }
 
     private function render($view, $data = [])
     {
