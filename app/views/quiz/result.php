@@ -26,7 +26,7 @@ unset($_SESSION['score']);
             color: #333;
         }
         .good {
-            color: #27ae60;
+            color: #4CAF50;
         }
 
         .average {
@@ -35,6 +35,21 @@ unset($_SESSION['score']);
 
         .bad {
             color: #e74c3c;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 200px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: rgb(62, 142, 65);
         }
     </style>
 <main>
@@ -45,9 +60,9 @@ unset($_SESSION['score']);
         if ($score == $totalQuestions) {
             echo '<p class="message good">🔥 Parfait ! Vous êtes un maître du quiz !</p>';
         } elseif ($score >= ($totalQuestions / 2)) {
-            echo '<p class="message average">💡 Bien joué ! Vous avez un bon niveau.</p>';
+            echo '<p class="message average">💡 Ca va, c est bien ! Vous avez un bon niveau.</p>';
         } else {
-            echo '<p class="message bad">😕 Pas grave, vous ferez mieux la prochaine fois !</p>';
+            echo '<p class="message bad">😕 Vraiment nul, révises !</p>';
         }
         ?>
 
