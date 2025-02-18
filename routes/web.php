@@ -29,9 +29,7 @@ if ($_SERVER['REQUEST_URI'] === '/auth/login' && $_SERVER['REQUEST_METHOD'] === 
         header('Location: /auth/login');
         exit();
     }
-    // Appeler le contrôleur pour afficher les scores de l'utilisateur
-    $scoresController->showScores($_SESSION['user']['id']);  // On suppose que l'ID de l'utilisateur est stocké dans la session
-
+    $scoresController->showScores($_SESSION['user']['id']);
 } elseif ($_SERVER['REQUEST_URI'] === '/quiz/setup' && $_SERVER['REQUEST_METHOD'] === 'GET') {
     require dirname(__DIR__) . '/app/views/quiz/setup.php';
 } elseif (strpos($_SERVER['REQUEST_URI'], '/quiz/play') === 0 && $_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -46,6 +44,12 @@ if ($_SERVER['REQUEST_URI'] === '/auth/login' && $_SERVER['REQUEST_METHOD'] === 
     $quizController->saveQuiz();
 } elseif ($_SERVER['REQUEST_URI'] === '/quiz/next' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $quizController->nextQuestion();
+} elseif ($_SERVER['REQUEST_URI'] === '/quiz/replay' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $quizController->startReplay($_POST['quiz_id']);
+} elseif ($_SERVER['REQUEST_URI'] === '/quiz/replay/result') {
+    $quizController->saveReplayScore();
+} elseif ($_SERVER['REQUEST_URI'] === '/quiz/replay-next' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $quizController->nextReplayQuestion();
 } elseif ($_SERVER['REQUEST_URI'] === '/') {
     session_start();
     if (!isset($_SESSION['user'])) {

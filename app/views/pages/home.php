@@ -1,7 +1,10 @@
-<?php 
-include __DIR__ . '/../layouts/header.php';  
+<?php
+include __DIR__ . '/../layouts/header.php';
 
 $quizInProgress = isset($_SESSION['quiz']) && !empty($_SESSION['quiz']);
+
+$quizModel = new \App\Models\QuizModel();
+$savedQuizzes = $quizModel->getAllQuizzes();
 
 if (!$quizInProgress || isset($_POST['reset_quiz'])) {
     unset($_SESSION['quiz']);
@@ -13,6 +16,7 @@ if (!$quizInProgress || isset($_POST['reset_quiz'])) {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,9 +25,11 @@ if (!$quizInProgress || isset($_POST['reset_quiz'])) {
         main {
             padding: 10px 20px;
         }
+
         h2 {
             color: #333;
         }
+
         button {
             background-color: #4CAF50;
             color: white;
@@ -35,18 +41,22 @@ if (!$quizInProgress || isset($_POST['reset_quiz'])) {
             font-size: 16px;
             margin: 5px;
         }
+
         button:hover {
             background-color: rgb(62, 142, 65);
         }
+
         .warning-box {
             border: 2px solid #f39c12;
             padding: 15px;
             margin-bottom: 20px;
             background-color: #fff3cd;
         }
+
         .danger-button {
             background-color: #e74c3c;
         }
+
         .danger-button:hover {
             background-color: #c0392b;
         }
@@ -55,32 +65,50 @@ if (!$quizInProgress || isset($_POST['reset_quiz'])) {
 
 <body>
 
-<main>
-    <h2>Bienvenue sur Battle Quizz</h2>
+    <main>
+        <h2>Bienvenue sur Battle Quizz</h2>
 
-    <p>Prêt à tester tes connaissances ?</p>
+        <p>Prêt à tester tes connaissances ?</p>
 
-    <?php if ($quizInProgress) : ?>
-        <div class="warning-box">
-            <h3>⚠️ Un quiz est en cours</h3>
-            <p>Voulez-vous reprendre votre quiz ou en commencer un nouveau ?</p>
-            
-            <form action="/quiz/play" method="POST" style="display: inline;">
-                <button type="submit">▶ Reprendre le Quiz</button>
-            </form>
+        <?php if ($quizInProgress) : ?>
+            <div class="warning-box">
+                <h3>⚠️ Un quiz est en cours</h3>
+                <p>Voulez-vous reprendre votre quiz ou en commencer un nouveau ?</p>
 
-            <form action="/" method="POST" style="display: inline;">
-                <input type="hidden" name="reset_quiz" value="1">
-                <button type="submit" class="danger-button">❌ Nouveau Quiz</button>
-            </form>
-        </div>
-    <?php endif; ?>
+                <form action="/quiz/play" method="POST" style="display: inline;">
+                    <button type="submit">▶ Reprendre le Quiz</button>
+                </form>
 
-    <a href="/quiz/setup">
-        <button>🎲 Générer un Quiz</button>
-    </a>
+                <form action="/" method="POST" style="display: inline;">
+                    <input type="hidden" name="reset_quiz" value="1">
+                    <button type="submit" class="danger-button">❌ Nouveau Quiz</button>
+                </form>
+            </div>
+        <?php endif; ?>
 
-</main>
+        <a href="/quiz/setup">
+            <button>🎲 Générer un Quiz</button>
+        </a>
+
+        <?php if (!empty($savedQuizzes)) : ?>
+            <h2>📜 Quiz enregistrés</h2>
+            <ul>
+                <?php foreach ($savedQuizzes as $quiz) : ?>
+                    <li>
+                        <strong><?= htmlspecialchars($quiz['title']) ?></strong>
+                        (<?= htmlspecialchars($quiz['difficulty']) ?> - <?= htmlspecialchars($quiz['category']) ?>)
+                        <form action="/quiz/replay" method="POST" style="display: inline;">
+                            <input type="hidden" name="quiz_id" value="<?= $quiz['_id'] ?>">
+                            <button type="submit">▶ Rejouer</button>
+                        </form>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else : ?>
+            <p>Aucun quiz enregistré pour le moment.</p>
+        <?php endif; ?>
+    </main>
 
 </body>
+
 </html>
